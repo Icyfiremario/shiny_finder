@@ -31,6 +31,7 @@ jobs:
         with:
           msystem: CLANG64
           update: true
+          cache: true
           install: >-
             mingw-w64-clang-x86_64-cmake
             mingw-w64-clang-x86_64-clang
@@ -52,3 +53,10 @@ jobs:
         run: |
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
