@@ -5,26 +5,28 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
             compiler: clang
           - os: windows-latest
             compiler: msys2-clang
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       # --- Linux Setup ---
       - name: Setup Linux Clang
-        if: matrix.os == 'ubuntu-latest'
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build
 
       # --- MSYS2 Windows Setup
       - name: Setup MSYS2
-        if: matrix.os == 'windows-latest'
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: msys2/setup-msys2@v2
         with:
           msystem: CLANG64
@@ -37,7 +39,7 @@ jobs:
 
       # --- Build Step ---
       - name: Configure and Build
-        shell: ${{ matrix.os == 'windows-latest' && 'msys {0}' || 'bash' }}
+        shell: ${{ matrix.os == 'windows-latest' && 'msys2 {0}' || 'bash' }}
         run: |
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
           cmake --build build
