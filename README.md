@@ -10,6 +10,6 @@ I made it because I found using Pokefinder to find shiny PIDs for gen 3 ACE was 
 
 -s: SID (default: 0)
 
--o: Output file name (default: TSV.csv where TSV == (TID ^ SID) >> 4)
+-o: Output file name (default: TSV.csv where TSV = (TID ^ SID) >> 4)
 
 -m: Method (default: METHOD1 (ie: Static1/Wild1))
