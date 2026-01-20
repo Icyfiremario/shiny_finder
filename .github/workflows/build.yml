@@ -10,8 +10,12 @@ jobs:
         include:
           - os: ubuntu-latest
             compiler: clang
+            artifact_name: shiny-finder-linux
+            binary_path: build/shiny-finder
           - os: windows-latest
             compiler: msys2-clang
+            artifact_name: shiny-finder-windows
+            binary_path: build/shiny-finder.exe
 
     steps:
       - name: Checkout code
