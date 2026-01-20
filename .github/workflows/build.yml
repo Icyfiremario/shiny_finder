@@ -1,0 +1,43 @@
+name: Multi-platform build
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: clang
+          - os: windows-latest
+            compiler: msys2-clang
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- Linux Setup ---
+      - name: Setup Linux Clang
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build
+
+      # --- MSYS2 Windows Setup
+      - name: Setup MSYS2
+        if: matrix.os == 'windows-latest'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: CLANG64
+          update: true
+          install: ->
+            mingw-w64-clang-x86_64-cmake
+            mingw-w64-clang-x86_64-clang
+            mingw-w64-clang-x86_64-ninja
+            mingw-w64-clang-x86_64-toolchain
+
+      # --- Build Step ---
+      - name: Configure and Build
+        shell: ${{ matrix.os == 'windows-latest' && 'msys {0}' || 'bash' }}
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
