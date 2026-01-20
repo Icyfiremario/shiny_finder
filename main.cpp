@@ -160,7 +160,7 @@ int main(const int argc, char** argv)
         << shiny.IVs[0] << ',' << shiny.IVs[1] << ',' << shiny.IVs[2] << ','
         << shiny.IVs[4] << ',' << shiny.IVs[5] << ',' << shiny.IVs[3] << ','
         << (shiny.IVs[0] + shiny.IVs[1] + shiny.IVs[2] + shiny.IVs[3] + shiny.IVs[4] + shiny.IVs[5]) << ','
-        << shiny.seed << '\n';
+        << "0x" << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << shiny.seed << '\n';
     }
 
     outFile.close();
